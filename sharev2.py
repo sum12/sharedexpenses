@@ -35,7 +35,7 @@ def calc(data):
     table = defaultdict(lambda :defaultdict(lambda: 0))
     for d in data['calc']:
         all |= set(d['participants'])
-        all |= set(d['by'])
+        all |= set([d['by']])
         nparticipants =  len(d['participants'])
         d['amount'] = float(d['amount'])
         pve = {d['by']:d['amount']}
@@ -54,6 +54,10 @@ def calc(data):
                 shouldPay[i]=0
     table = defaultdict(lambda :defaultdict(lambda: 0))
     addToTable(table,shouldGet,shouldPay)
+#    print dict((j,i) for i,j in enumerate(all))
+    table['allparts']=dict((j,i) for i,j in enumerate(all))
+    table = dict((k,dict(table[k])) for k in table.keys())
+#    print table
     return json.dumps(table)
 
 from flask import Flask, render_template, request, jsonify
@@ -63,6 +67,7 @@ app = Flask(__name__)
 def home():
     if request.method == 'POST':
         posted = request.json
+#        print posted
         return calc(posted)
     else:
         return 'Not Supported !'
