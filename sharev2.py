@@ -57,7 +57,7 @@ def calc(data):
 #    print dict((j,i) for i,j in enumerate(all))
     table['allparts']=dict((j,i) for i,j in enumerate(all))
     table = dict((k,dict(table[k])) for k in table.keys())
-#    print table
+    print table
     return json.dumps(table)
 
 from flask import Flask, render_template, request, jsonify
@@ -67,7 +67,7 @@ app = Flask(__name__)
 def home():
     if request.method == 'POST':
         posted = request.json
-#        print posted
+        print posted
         return calc(posted)
     else:
         return 'Not Supported !'
