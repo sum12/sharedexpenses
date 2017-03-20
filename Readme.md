@@ -1,8 +1,11 @@
 ```javascript
 function myFunction() {
   var parts=[];
-  for (var part in arguments)
+  // Assuming last element of the argument is the one with 
+  // individual expenseces shared.
+  for (var part=0; part < arguments.length-1 && arguments[part][0] != ''; part++){
    parts.push(arguments[part][0].toString());
+   }
   var data={};
   data['calc'] = []
   for (var by in parts){
@@ -10,6 +13,19 @@ function myFunction() {
       'by':parts[by],
       'amount':parseFloat(arguments[by][arguments[by].length-1]),
       'participants':parts
+    }
+    data['calc'].push(dat);
+  }
+  var indi = arguments.length-1;
+  for (var betwns=0; betwns <= arguments[indi].length-1; betwns++){
+    var btwnparts = arguments[indi][betwns][2].split(',')
+    //return typeof(arguments[indi][betwns][0]);
+    if (arguments[indi][betwns][0] == '')
+      break;
+    var dat = {
+      'by': arguments[indi][betwns][1].toString(),
+      'amount': parseFloat(arguments[indi][betwns][0]),
+      'participants': btwnparts,
     }
     data['calc'].push(dat);
   }
@@ -21,7 +37,8 @@ function myFunction() {
  backdata = JSON.parse(UrlFetchApp.fetch('http://infinite-chamber-24921.herokuapp.com/', options).getContentText());
  var arr = [];
  
- 
+ // converting json data to table.
+ // allparts is dict with name:number mactching.
  arr[0] = ['']
  var allparts = backdata['allparts']
  for (part in backdata['allparts'])
